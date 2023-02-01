@@ -1,62 +1,48 @@
 import streamlit as st
-from functions import filter_df,list_to_strURL, get_card, get_total_pages, print_filter_cards_from_pages
-import ast
-import requests
-from bs4 import BeautifulSoup
+from filter_funtions import get_all_genres_pages_link, get_language_by_values, get_country_code, get_all_page_last_part,get_soup, show_card
+import datetime
 
+genres_multiselect_button = st.multiselect(label="Select Genre",
+         options=list(get_all_genres_pages_link().keys()),default='History')
 
-release_dict = filter_df['Release'].values[0]
-release_dict = ast.literal_eval(release_dict)
-genres_dict = filter_df["Genre"].values[0]
-genres_dict = ast.literal_eval(genres_dict)
-country_dict = filter_df["Country"].values[0]
-country_dict = ast.literal_eval(country_dict)
+selected_url = ""
+for genre in genres_multiselect_button:
+    selected_url += genre.lower() + ","
+selected_url = selected_url[:-1]
 
+url = f"https://www.imdb.com/search/title/?genres={selected_url}"
 
+start_date = st.date_input("From :",min_value=datetime.date(1901,1,1),max_value=datetime.date.today())
+end_date = st.date_input("To :",min_value=datetime.date(1901,1,1),max_value=datetime.date.today())
 
+url += "&release_date=" + str(start_date) + "," + str(end_date)
 
-release_button = st.radio(label="Select Release Year",options=release_dict.keys(),index=1,horizontal=True)
-genre_button = st.multiselect(label="Select Genres",options=genres_dict.keys())
-country_button = st.multiselect(label="Select Couries",options=country_dict.keys())
+# minimum_rating_slider = st.slider(label="Select Minimum Rating : ",value=8.5,step=0.1,min_value=0.0,max_value=10.0)
+#
+# url += "&user_rating=" + str(minimum_rating_slider)
 
-genre_url_sorted = list_to_strURL(genres_dict,genre_button)
-country_url_sorted = list_to_strURL(country_dict,country_button)
-# movie_url = f"https://myflixer.to/filter?type=movie&quality=all&release_year={release_dict[release_button]}&genre={genre_url_sorted}&country={country_url_sorted}"
-# st.write(movie_url)
+get_language_by_values_dict = get_language_by_values()
 
-movie_url = f"https://myflixer.to/filter?type=movie&quality=all&release_year={release_dict[release_button]}"
-if genre_button:
-        movie_url += f"&genre={genre_url_sorted}"
-else:
-        movie_url += "&genre=all"
-if country_button:
-        movie_url += f"&country={country_url_sorted}"
-else:
-        movie_url += "&country=all"
-# st.write(movie_url)
+language_multiselect = st.multiselect(label="Select Language : ",options=list(get_language_by_values_dict.keys()),max_selections=1,default='Bengali')
 
+url += "&languages=" + get_language_by_values_dict[language_multiselect[0]]
 
-# needed_headers = {'User-Agent': "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"}
+country_code_dict = get_country_code()
+country_multiselect = st.multiselect(label="Select Country : ", options=list(country_code_dict.keys()),max_selections=1,default="India")
 
+url += "&countries=" + country_code_dict[country_multiselect[0]]
 
+st.write(url)
 
+try:
+    last_part_dict = get_all_page_last_part(url=url)
+    recent_page = st.multiselect(label="Select Page",options=last_part_dict.keys(),default=list(last_part_dict.keys())[0],max_selections=1)
+    url += f"&start={last_part_dict[recent_page[0]]}&ref_=adv_nxt"
 
-while True:
-        indicator = True
-        try:
-                response = requests.get(movie_url,timeout=5.0)
-        except:
-                indicator = False
-                continue
-        if indicator:break
-
-
-doc = BeautifulSoup(response.content, 'html.parser')
-total_pages = get_total_pages(doc)
-
-if total_pages==0:
-        print_filter_cards_from_pages(movie_url)
-else:
-        for i in range(1,total_pages+1,1):
-                url = movie_url + f"&page={i}"
-                print_filter_cards_from_pages(url)
+    soup = get_soup(url)
+    cards = soup.find_all("div",class_="lister-item mode-advanced")
+    for card in cards:
+        show_card(card)
+    st.write(url)
+except:
+    st.write("Sorry!!! No Result Found...")
