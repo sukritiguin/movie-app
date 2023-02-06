@@ -22,8 +22,10 @@ st.session_state.id = movie_id
 st.session_state.imdb_id = df[df['title'] == selected_movie].imdb_id.values[0]
 st.session_state.name = selected_movie
 
-doc = get_movie_details(movie_id)
-
+try:
+    doc = get_movie_details(movie_id)
+except:
+    doc = None
 left,right = st.columns(2)
 with left:
     try:
@@ -32,17 +34,17 @@ with left:
         st.image("https://th.bing.com/th/id/OIP.svp_xDT7rtBajr3qbm43JwHaK")
 with right:
     st.title("Title : " + selected_movie)
-    st.markdown("**Tagline :** " + doc['tagline'])
-    st.markdown("**Genres :** " + list_to_str(doc["genres"]))
-    st.markdown("**Rating :** " + str(doc["vote_average"]))
-    st.markdown("**Votes :** " + str(doc['vote_count']))
-    st.markdown("**Release Date :** " + doc["release_date"])
-    st.markdown("**Duration :** " + str(doc["runtime"]) + " Min.")
+    st.markdown("**Tagline :** " + doc['tagline'] if doc else None)
+    st.markdown("**Genres :** " + list_to_str(doc["genres"] if doc else None))
+    st.markdown("**Rating :** " + str(doc["vote_average"] if doc else None))
+    st.markdown("**Votes :** " + str(doc['vote_count'] if doc else None))
+    st.markdown("**Release Date :** " + doc["release_date"] if doc else None)
+    st.markdown("**Duration :** " + str(doc["runtime"] if doc else None) + " Min.")
     # link = '[Watch Trailer]({})'.format(doc['trailer'])
     if st.button('Trailer'):
-        webbrowser.open_new_tab(doc['trailer'])
+        webbrowser.open_new_tab(doc['trailer'] if doc else None)
     if st.button('OTT'):
-        webbrowser.open_new_tab(doc['ott'])
+        webbrowser.open_new_tab(doc['ott'] if doc else None)
 
 if st.button('Overview'):
     engine = pyttsx3.init()
@@ -52,7 +54,7 @@ if st.button('Overview'):
     engine.setProperty('voice', voices[1].id)
     engine.say(doc["overview"])
     engine.runAndWait()
-st.markdown("**Overview :** " + doc['overview'])
+st.markdown("**Overview :** " + doc['overview'] if doc else None)
 
 st.markdown("---")
 
@@ -96,15 +98,24 @@ for i in range(6):
     len_ = len(cast_dict[i]['known_for'])
     if len_ > 0:
         with c1:
-            st.image(cast_dict[i]['known_for'][0]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][0]['poster'])
+            except:
+                pass
             st.markdown("**" + cast_dict[i]['known_for'][0]['title'] + "**")
     if len_ > 1:
         with c2:
-            st.image(cast_dict[i]['known_for'][1]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][1]['poster'])
+            except:
+                pass
             st.markdown("**" + cast_dict[i]['known_for'][1]['title'] + "**")
     if len_ > 2:
         with c3:
-            st.image(cast_dict[i]['known_for'][2]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][2]['poster'])
+            except:
+                pass
             st.markdown("**" + cast_dict[i]['known_for'][2]['title'] + "**")
 
     st.markdown("----")
@@ -113,7 +124,10 @@ for i in range(6):
     len_ = len(cast_dict[i]['known_for'])
     if len_ > 3:
         with c1:
-            st.image(cast_dict[i]['known_for'][3]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][3]['poster'])
+            except:
+                pass
             st.markdown("**" + cast_dict[i]['known_for'][3]['title'] + "**")
     if len_ > 4:
         with c2:

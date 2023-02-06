@@ -89,7 +89,7 @@ def get_cast_detail(movie_id):
         else:
             all_known_for = doc.find("div",id="known_for_scroller").find("ul").find_all("li")
         for known_for in all_known_for:
-            poster = "https://www.themoviedb.org" + known_for.find("img")['src']
+            poster = "https://www.themoviedb.org" + known_for.find("img")['src'] if known_for.find("img") else ""
             title = known_for.find("p").text
             dict_['known_for'].append({
                 'title' : title,
@@ -137,6 +137,7 @@ def get_recommended_movie_cast_detail(movie_id):
 
 def list_to_str(lst):
     str_ = ""
+    if lst == None:return ""
     for i in lst:
         str_ += i + ", "
     return str_[:-2]
