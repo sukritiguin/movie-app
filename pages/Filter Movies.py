@@ -2,6 +2,8 @@ import streamlit as st
 from filter_funtions import get_all_genres_pages_link, get_language_by_values, get_country_code, get_all_page_last_part,get_soup, show_card
 import datetime
 
+st.header("Search Movies")
+
 genres_multiselect_button = st.multiselect(label="Select Genre",
          options=list(get_all_genres_pages_link().keys()),default='History')
 
@@ -30,9 +32,12 @@ url += "&languages=" + get_language_by_values_dict[language_multiselect[0]]
 country_code_dict = get_country_code()
 country_multiselect = st.multiselect(label="Select Country : ", options=list(country_code_dict.keys()),max_selections=1,default="India")
 
-url += "&countries=" + country_code_dict[country_multiselect[0]]
+try:
+    url += "&countries=" + country_code_dict[country_multiselect[0]]
+except:
+    pass
 
-st.write(url)
+# st.write(url)
 
 try:
     last_part_dict = get_all_page_last_part(url=url)
@@ -43,6 +48,6 @@ try:
     cards = soup.find_all("div",class_="lister-item mode-advanced")
     for card in cards:
         show_card(card)
-    st.write(url)
+    # st.write(url)
 except:
     st.write("Sorry!!! No Result Found...")

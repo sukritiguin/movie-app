@@ -2,6 +2,7 @@ import streamlit as st
 import webbrowser
 from functions import df
 import pyttsx3
+from filter_funtions import get_youtube_trailler, get_image_with_text
 
 with open("design.css") as filename:
     st.markdown(f"<style>{filename.read()}</style>",unsafe_allow_html=True)
@@ -39,10 +40,19 @@ with right:
     st.markdown("**Release Date :** " + doc["release_date"])
     st.markdown("**Duration :** " + str(doc["runtime"]) + " Min.")
     # link = '[Watch Trailer]({})'.format(doc['trailer'])
-    if st.button('Trailer'):
-        webbrowser.open_new_tab(doc['trailer'])
+    # if st.button('Trailer'):
+    #     webbrowser.open_new_tab(doc['trailer'])
+    # if st.button('OTT'):
+    #     webbrowser.open_new_tab(doc['ott'])
+    st.markdown(
+        f"""
+                <a href="{get_youtube_trailler(movie_name=selected_movie)}" style="padding: 8px 12px; background-color: blue; color: white; border-radius: 4px; text-decoration: none;">Watch Trailer</a>
+                """,
+        unsafe_allow_html=True,
+    )
+
     if st.button('OTT'):
-        webbrowser.open_new_tab(doc['ott'])
+        webbrowser.open_new_tab(doc['ott'] if doc!=None else "")
 
 if st.button('Overview'):
     engine = pyttsx3.init()
@@ -96,15 +106,24 @@ for i in range(6):
     len_ = len(cast_dict[i]['known_for'])
     if len_ > 0:
         with c1:
-            st.image(cast_dict[i]['known_for'][0]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][0]['poster'])
+            except:
+                st.image(get_image_with_text(text=cast_dict[i]['known_for'][0]['title'], width=150, height=225, font_width=20))
             st.markdown("**" + cast_dict[i]['known_for'][0]['title'] + "**")
     if len_ > 1:
         with c2:
-            st.image(cast_dict[i]['known_for'][1]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][1]['poster'])
+            except:
+                st.image(get_image_with_text(text=cast_dict[i]['known_for'][1]['title'], width=150, height=225, font_width=20))
             st.markdown("**" + cast_dict[i]['known_for'][1]['title'] + "**")
     if len_ > 2:
         with c3:
-            st.image(cast_dict[i]['known_for'][2]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][2]['poster'])
+            except:
+                st.image(get_image_with_text(text=cast_dict[i]['known_for'][2]['title'], width=150, height=225, font_width=20))
             st.markdown("**" + cast_dict[i]['known_for'][2]['title'] + "**")
 
     st.markdown("----")
@@ -113,15 +132,24 @@ for i in range(6):
     len_ = len(cast_dict[i]['known_for'])
     if len_ > 3:
         with c1:
-            st.image(cast_dict[i]['known_for'][3]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][3]['poster'])
+            except:
+                st.image(get_image_with_text(text=cast_dict[i]['known_for'][3]['title'], width=150, height=225, font_width=20))
             st.markdown("**" + cast_dict[i]['known_for'][3]['title'] + "**")
     if len_ > 4:
         with c2:
-            st.image(cast_dict[i]['known_for'][4]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][4]['poster'])
+            except:
+                st.image(get_image_with_text(text=cast_dict[i]['known_for'][0]['title'], width=150, height=225, font_width=20))
             st.markdown("**" + cast_dict[i]['known_for'][4]['title'] + "**")
     if len_ > 5:
         with c3:
-            st.image(cast_dict[i]['known_for'][5]['poster'])
+            try:
+                st.image(cast_dict[i]['known_for'][5]['poster'])
+            except:
+                st.image(get_image_with_text(text=cast_dict[i]['known_for'][0]['title'], width=150, height=225, font_width=20))
             st.markdown("**" + cast_dict[i]['known_for'][5]['title'] + "**")
     st.markdown("----")
     st.markdown("----")

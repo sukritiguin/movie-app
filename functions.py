@@ -153,13 +153,16 @@ def get_trailler(movie_id):
     trailer = "https://www.youtube.com/watch?v=" + doc.find_all("a",class_="no_click play_trailer")[0]['data-id']
     return trailer
 
+from filter_funtions import get_image_with_text, get_youtube_trailler
 def show_recommendations(movie_id):
     dict_= get_recommended_movie_details(movie_id)
+    # print(dict_)
     link = "[Trailler]({})".format(get_trailler(movie_id))
     try:
         st.image(dict_['poster_path'])
     except:
-        st.image("https://th.bing.com/th/id/OIP.svp_xDT7rtBajr3qbm43JwHaK")
+        st.image(get_image_with_text(text=dict_['name'], width=150, height=225,
+                                     font_width=20))
     try:
         st.subheader(dict_['name'])
     except:
@@ -173,7 +176,12 @@ def show_recommendations(movie_id):
     except:
         st.markdown("**Release Date :** " + "Not Found")
     try:
-        st.markdown(link)
+        st.markdown(
+            f"""
+                        <a href="{get_youtube_trailler(movie_name=dict_['name'])}" style="padding: 8px 12px; background-color: blue; color: white; border-radius: 4px; text-decoration: none;">Watch Trailer</a>
+                        """,
+            unsafe_allow_html=True,
+        )
     except:
         st.markdown("Error")
 
