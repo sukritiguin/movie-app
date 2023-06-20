@@ -7,6 +7,8 @@ from selenium import webdriver
 from PIL import Image, ImageDraw, ImageFont
 
 
+
+"""
 def get_image_with_text(text):
     # create an image object
     img = Image.new("RGB", (500, 750), color="yellow")
@@ -24,6 +26,159 @@ def get_image_with_text(text):
     y = (750 - textheight) / 2
     draw.text((x, y), text, fill="black", font=font)
     return img
+
+"""
+
+# import random
+# from PIL import Image, ImageDraw, ImageFont
+#
+# def get_image_with_text(text):
+#     # create an image object
+#     img = Image.new("RGB", (500, 750), color=get_random_color())
+#
+#     # create an ImageDraw object
+#     draw = ImageDraw.Draw(img)
+#
+#     # create a font object
+#     font = get_random_font(36)
+#
+#     # draw text on the image
+#     textwidth, textheight = draw.textsize(text, font)
+#     x = (500 - textwidth) / 2
+#     y = (750 - textheight) / 2
+#     draw.text((x, y), text, fill="black", font=font)
+#     return img
+#
+# def get_random_color():
+#     # return tuple(random.randint(0, 255) for _ in range(3))
+#     offset = random.randint(0, 50)
+#     base_color = get_random_color()
+#     color_with_offset = tuple(min(c + offset, 255) for c in base_color)
+#     return color_with_offset
+#
+# def get_random_font(size):
+#     fonts = [
+#         "arial.ttf",
+#         "times.ttf",
+#         "calibri.ttf",
+#         "impact.ttf",
+#         "georgia.ttf",
+#         "verdana.ttf",
+#         "comic.ttf",
+#         "courier.ttf",
+#         "roboto.ttf",
+#         "futura.ttf"
+#     ]
+#     font_name = random.choice(fonts)
+#     return ImageFont.truetype(font_name, size)
+
+
+
+
+
+
+import random
+from PIL import Image, ImageDraw, ImageFont
+
+def get_image_with_text(text):
+    width = 500
+    height = 750
+    # Available fonts provided by PIL
+    available_fonts = [
+        "arial.ttf",
+        "arialbd.ttf",
+        "arialbi.ttf",
+        "ariali.ttf",
+        "cour.ttf",
+        "courbd.ttf",
+        "courbi.ttf",
+        "couri.ttf",
+        "times.ttf",
+        "timesbd.ttf",
+        "timesbi.ttf",
+        "timesi.ttf",
+        "verdana.ttf",
+        "verdanab.ttf",
+        "verdanai.ttf",
+        "verdanaz.ttf"
+    ]
+
+    # Randomly select font
+    font_file = random.choice(available_fonts)
+    font_size = 50
+
+    # Randomly select background color
+    bg_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+    # Create a new image with the specified background color
+    image = Image.new("RGB", (width, height), bg_color)
+
+    # Create a drawing object
+    draw = ImageDraw.Draw(image)
+
+    # Add tiny repeated text in the background
+    tiny_text = text
+    tiny_font_size = 20
+    tiny_font = ImageFont.truetype(font_file, tiny_font_size)
+    tiny_text_width, tiny_text_height = draw.textsize(tiny_text, font=tiny_font)
+
+    for i in range(0, width, tiny_text_width):
+        for j in range(0, height, tiny_text_height):
+            draw.text((i, j), tiny_text, font=tiny_font, fill=(255, 255, 255))
+
+    # Split the text into words
+    words = text.split()
+    words_per_line = 2
+    line_height = 60
+    current_line = []
+
+    # Calculate the position for the text with a random offset
+    font = ImageFont.truetype(font_file, font_size)
+    offset = random.uniform(0.2, 0.7)
+    x = int(width * offset)
+    y = (height - (len(words) // words_per_line) * line_height) // 2
+
+    # Write the text on the image
+    text_color = (0, 0, 0)  # Dark black color
+    len_ = len(words)
+    i = 0
+    while i<len_:
+        current_line.append(words[i])
+        if len(current_line) == words_per_line or i==len_-1:
+            line = " ".join(current_line)
+            text_width, text_height = draw.textsize(line, font=font)
+            draw.text((x - text_width // 2, y), line, font=font, fill=text_color)
+            y += line_height
+            current_line = []
+        i += 1
+    # Draw corner circles
+    corner_colors = [
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    ]
+    corner_ellipse_colors = [
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+        (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    ]
+
+    circle_radius = random.randint(80, 160)
+    half_circle_radius = circle_radius // 2
+    circle_positions = [(0, 0), (0, height), (width, 0), (width, height)]
+    for position, color, ellipsis_color in zip(circle_positions, corner_colors, corner_ellipse_colors):
+        draw.ellipse((position[0] - circle_radius, position[1] - circle_radius,
+                      position[0] + circle_radius, position[1] + circle_radius), fill=color)
+        draw.ellipse((position[0] - half_circle_radius, position[1] - half_circle_radius,
+                      position[0] + half_circle_radius, position[1] + half_circle_radius), fill=ellipsis_color)
+
+    return image
+
+
+
+
 
 def get_year_regx(s:str)->str:
     match = re.search(r'\d{4}', s)
