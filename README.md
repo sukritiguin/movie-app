@@ -16,6 +16,13 @@ The Movie Recommendation System is a sophisticated software application designed
 
 **Release Date:** June 23, 2023
 
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
 ## Download Pre-trained ML Models
 
 This project utilizes two large machine learning models for its functionality. Due to their size, these models are not included in the GitHub repository. However, you can download them separately from the following location:
