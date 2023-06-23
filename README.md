@@ -9,7 +9,7 @@
 
 
 ## Introduction
-The Movie Recommendation System is a sophisticated software application designed to provide users with personalized movie recommendations based on their preferences and selected movies. This release documentation outlines the key features, updates, bug fixes, and known issues associated with the latest version of the system.
+The Movie Recommendation System is a sophisticated software application designed to provide users with personalized movie recommendations based on their preferences and selected movies.
 
 ## Release Information
 **Version:** 1.0.0
