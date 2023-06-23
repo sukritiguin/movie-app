@@ -1,4 +1,13 @@
 # Movie Recommendation System - Release Documentation
+[![Python](https://img.shields.io/badge/Python-3.9-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-0.86.0-red.svg)](https://www.streamlit.io/)
+[![Selenium](https://img.shields.io/badge/Selenium-4.1.0-yellow.svg)](https://www.selenium.dev/)
+[![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-4.10.0-green.svg)](https://www.crummy.com/software/BeautifulSoup/)
+[![TMDB API](https://img.shields.io/badge/TMDB%20API-v3-orange.svg)](https://www.themoviedb.org/documentation/api)
+[![IMDB API](https://img.shields.io/badge/IMDB%20API-v1-purple.svg)](https://developer.imdb.com/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-0.24.2-lightblue.svg)](https://scikit-learn.org/)
+
+
 ## Introduction
 The Movie Recommendation System is a sophisticated software application designed to provide users with personalized movie recommendations based on their preferences and selected movies. This release documentation outlines the key features, updates, bug fixes, and known issues associated with the latest version of the system.
 
